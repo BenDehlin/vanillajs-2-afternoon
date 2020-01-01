@@ -76,7 +76,8 @@
     <div class="container">
         <h1>Try Typing...</h1>
         <div class="input-container">
-            <input type="text" onkeypress = "filterText()">
+            <input type="text">
+            <!-- <input type="text" onkeypress = "filterText()"> -->
             <ul id="list"></ul>
         </div>
     </div>
@@ -84,32 +85,68 @@
 </body>
 
 <script>
-    let characters = []
-    let list = document.getElementById('list')
-    let search = document.querySelector('input')
+//     let characters = []
+//     let list = document.getElementById('list')
+//     let search = document.querySelector('input')
 
-    fetch('https://www.swapi.co/api/people')
+//     getStuff()
+
+//     async function getStuff(){
+//     await fetch('https://www.swapi.co/api/people')
+//     .then(response => response.json())
+//     .then(response => {
+//       characters.push(...response.results);
+//     })
+//     }
+
+//     function render(newChar) {
+//         const html = newChar.join('');
+//         list.innerHTML = html;
+// }
+
+//     function filterText(){
+//         console.log(characters)
+//         const filtered = characters
+//         .filter((char, index) => char.name.toLowerCase()
+//         .includes(search.value.toLowerCase())
+//         )
+//         .map(char => `<li>${char.name}</li>`)
+
+//         if(filtered.length){
+//             render(filtered)
+//         }
+//     }
+
+
+    const characters = [];
+    const list = document.getElementById('list');
+    const search = document.querySelector('input');
+
+    getStuff()
+
+    async function getStuff(){
+    await fetch('https://www.swapi.co/api/people')
     .then(response => response.json())
     .then(response => {
       characters.push(...response.results);
     })
-
-    function render(newChar) {
-        const html = newChar.join('');
-        list.innerHTML = html;
-}
-
-    function filterText(){
-        const filtered = characters
-        .filter((char, index) => char.name.toLowerCase()
-        .includes(search.value.toLowerCase())
-        )
-        .map(char => `<li>${char.name}</li>`)
-
-        if(filtered.length){
-            render(filtered)
-        }
     }
+
+
+    function render(array) {
+    const html = array.join('');
+    list.innerHTML = html;
+    }
+
+    search.addEventListener('keyup', () => {
+    const filtered = characters
+        .filter(val => val.name.toLowerCase().includes(search.value.toLowerCase()))
+        .map(val => `<li>${val.name}</li>`)
+
+    if (filtered.length) {
+        render(filtered)
+        }
+    });
 
 </script>
 
