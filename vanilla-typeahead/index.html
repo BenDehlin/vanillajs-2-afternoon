@@ -76,7 +76,7 @@
     <div class="container">
         <h1>Try Typing...</h1>
         <div class="input-container">
-            <input type="text">
+            <input type="text" onkeypress = "filterText()">
             <ul id="list"></ul>
         </div>
     </div>
@@ -85,53 +85,31 @@
 
 <script>
     let characters = []
-    let list = document.querySelector('list')
+    let list = document.getElementById('list')
     let search = document.querySelector('input')
 
-    async function getCharactersAsync() 
-{
-    console.log(characters)
-    let response = await fetch('https://www.swapi.co/api/people')
-    let data = await response.json()
-    // console.log(data.results)
-    // characters.push(...data.results)
-    return data.results
+    fetch('https://www.swapi.co/api/people')
+    .then(response => response.json())
+    .then(response => {
+      characters.push(...response.results);
+    })
+
+    function render(newChar) {
+        const html = newChar.join('');
+        list.innerHTML = html;
 }
-    let updatedCharacters = async () => await getCharactersAsync().then(res => res)
-
-    console.log(updatedCharacters)
-    console.log(updatedCharacters.length)
-    console.log(updatedCharacters[1])
-    console.log(['ice', 'cream','ice', 'cream','ice', 'cream','ice', 'cream','ice', 'cream','ice', 'cream','ice', 'cream','ice', 'cream','ice', 'cream','ice', 'cream','ice', 'cream','ice', 'cream'])
-
-    function render(arr){
-        const html = arr.join('')
-        list.innerHTML = html
-        console.log('render ' + html)
-    }
 
     function filterText(){
-        console.log('characters')
-        console.log(['ice', 'cream','ice', 'cream','ice', 'cream','ice', 'cream','ice', 'cream','ice', 'cream','ice', 'cream','ice', 'cream','ice', 'cream','ice', 'cream','ice', 'cream','ice', 'cream'])
-        console.log(characters)
-        console.log(characters.length)
-        console.log(characters[0])
-        console.log(characters[1])
-        console.log(characters[0].name)
         const filtered = characters
         .filter((char, index) => char.name.toLowerCase()
-        .includes(this.value.toLowerCase())
-        
+        .includes(search.value.toLowerCase())
         )
         .map(char => `<li>${char.name}</li>`)
-        console.log(characters)
-        console.log(filtered)
 
         if(filtered.length){
             render(filtered)
         }
     }
-    search.addEventListener('keyup', filterText())
 
 </script>
 
